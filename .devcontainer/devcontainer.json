@@ -1,8 +1,8 @@
 {
     "name": "rust-devcontainer",
     "image": "mcr.microsoft.com/devcontainers/rust:latest",
-    "postCreateCommand": ["rustc --version", "cargo install aoc-cli"],
-    "postAttachCommand": "cargo update",
+    "postCreateCommand": "./scripts/postCreateCommand.sh",
+    "postAttachCommand": "./scripts/postAttachCommand.sh",
     "remoteUser": "vscode",
     "customizations": {
         "vscode": {
