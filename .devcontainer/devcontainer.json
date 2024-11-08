@@ -1,14 +1,19 @@
 {
     "name": "rust-devcontainer",
     "image": "mcr.microsoft.com/devcontainers/rust:latest",
-    "postCreateCommand": ["rustc --version", "cargo install aoc-cli"],
-    "postAttachCommand": "cargo update",
+    "postCreateCommand": "./scripts/postCreateCommand.sh",
+    "postAttachCommand": "./scripts/postAttachCommand.sh",
     "remoteUser": "vscode",
     "customizations": {
         "vscode": {
             "extensions": [
                 "github.vscode-github-actions",
-                "EditorConfig.EditorConfig"
+                "EditorConfig.EditorConfig",
+                "vadimcn.vscode-lldb",
+                "hbenl.vscode-test-explorer",
+                "Swellaby.vscode-rust-test-adapter",
+                "rust-lang.rust-analyzer",
+                "GitHub.vscode-pull-request-github"
             ]
         }
     }

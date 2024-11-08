@@ -1,4 +1,4 @@
-advent_of_code::solution!(%DAY_NUMBER%);
+advent_of_code::solution!(23);
 
 pub fn part_one(_input: &str) -> Option<u32> {
     None
