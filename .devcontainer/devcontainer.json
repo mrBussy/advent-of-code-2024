@@ -11,7 +11,9 @@
                 "EditorConfig.EditorConfig",
                 "vadimcn.vscode-lldb",
                 "hbenl.vscode-test-explorer",
-                "Swellaby.vscode-rust-test-adapter"
+                "Swellaby.vscode-rust-test-adapter",
+                "rust-lang.rust-analyzer",
+                "GitHub.vscode-pull-request-github"
             ]
         }
     }
