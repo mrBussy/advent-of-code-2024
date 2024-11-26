@@ -1,5 +1,5 @@
 advent_of_code::solution!(1);
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use regex::Regex;
 
