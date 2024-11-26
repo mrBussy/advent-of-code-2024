@@ -1,4 +1,7 @@
 advent_of_code::solution!(1);
+use std::collections::{HashMap, HashSet};
+
+use regex::Regex;
 
 ///
 ///
@@ -35,8 +38,59 @@ pub fn part_one(input: &str) -> Option<u32> {
     Some(result)
 }
 
-pub fn part_two(_input: &str) -> Option<u32> {
-    None
+///
+///
+/// Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "/// digits".
+/// Equipped with this new information, you now need to find the real first and last digit on each line. For /// example:
+///
+/// two1nine
+/// eightwothree
+/// abcone2threexyz
+/// xtwone3four
+/// 4nineeightseven2
+/// zoneight234
+/// 7pqrstsixteen
+///
+/// In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
+pub fn part_two(input: &str) -> Option<u32> {
+    let re = Regex::new(r"one|two|three|four|five|six|seven|eight|nine|zero|[0-9]").unwrap();
+    // create a hashset that will turn a string to u32
+    let mut hm: HashMap<&str, u32> = HashMap::new();
+    hm.insert("one", 1);
+    hm.insert("two", 2);
+    hm.insert("three", 3);
+    hm.insert("four", 4);
+    hm.insert("five", 5);
+    hm.insert("six", 6);
+    hm.insert("seven", 7);
+    hm.insert("eight", 8);
+    hm.insert("nine", 9);
+    hm.insert("zero", 0);
+
+    let result = input
+        .split('\n')
+        .map(|line| {
+            let digits: Vec<u32> = re
+                .captures_iter(line)
+                .map(|cap| {
+                    let matched = cap.get(0).unwrap().as_str();
+                    if let Ok(num) = matched.parse::<u32>() {
+                        num
+                    } else {
+                        hm[matched]
+                    }
+                })
+                .collect();
+
+            if digits.is_empty() {
+                0
+            } else {
+                digits.first().unwrap() * 10 + digits.last().unwrap()
+            }
+        })
+        .sum();
+
+    Some(result)
 }
 
 #[cfg(test)]
@@ -65,13 +119,13 @@ mod tests {
     }
     #[test]
     fn test_part_one() {
-        let result: Option<u32> = part_one(&advent_of_code::template::read_file("examples", DAY));
+        let result: Option<u32> = part_one(&advent_of_code::template::read_file_part("examples", DAY, 1));
         assert_eq!(result, Some(142));
     }
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        let result = part_two(&advent_of_code::template::read_file_part("examples", DAY, 2));
+        assert_eq!(result, Some(281));
     }
 }
