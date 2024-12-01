@@ -24,7 +24,25 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+
+    let mut list_left: Vec<u32> = Vec::new();
+    let mut list_right: Vec<u32> = Vec::new();
+
+    input.split('\n')
+    .for_each(|line| {
+        let split_line = line.split_ascii_whitespace().collect::<Vec<&str>>();
+        list_left.push(split_line[0].parse::<u32>().unwrap());
+        list_right.push(split_line[1].parse::<u32>().unwrap());
+        }
+    );
+
+    let mut result:u32 = 0;
+
+    list_left.into_iter().for_each(|left| {
+        result += left * list_right.clone().into_iter().filter(|right| right.eq(&left)).count() as u32;
+    });
+
+    Some(result)
 }
 
 #[cfg(test)]
@@ -33,13 +51,13 @@ mod tests {
 
     #[test]
     fn test_part_one() {
-        let result: Option<u32> = part_one(&advent_of_code::template::read_file_part("examples", DAY, 1));
+        let result: Option<u32> = part_one(&advent_of_code::template::read_file("examples",DAY));
         assert_eq!(result, Some(11));
     }
 
     #[test]
     fn test_part_two() {
-        let result = part_two(&advent_of_code::template::read_file_part("examples", DAY, 2));
-        assert_eq!(result, Some(281));
+        let result = part_two(&advent_of_code::template::read_file("examples", DAY));
+        assert_eq!(result, Some(31));
     }
 }
