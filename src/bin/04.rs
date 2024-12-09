@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 advent_of_code::solution!(4);
 
 pub fn count_horizontal(matrix: Vec<Vec<char>>) -> Option<u32> {
@@ -115,8 +117,45 @@ pub fn part_one(input: &str) -> Option<u32> {
     )
 }
 
-pub fn part_two(_input: &str) -> Option<u32> {
-    None
+#[derive(Eq, Hash, PartialEq, Debug)]
+struct Coordinate {
+    x: i32,
+    y: i32,
+}
+
+impl Coordinate {
+    fn new(x: i32, y: i32) -> Self {
+        Coordinate { x, y }
+    }
+}
+
+pub fn part_two(input: &str) -> Option<u32> {
+
+    let positions =  input.lines().enumerate().flat_map(move |(y, line)| {
+        line.chars().enumerate().map(move|(x, c)|
+        (Coordinate{x: x as i32, y: y as i32}, c)
+    )}).collect::<HashMap<Coordinate, char>>();
+
+    Some(positions.iter().filter_map(|(k, v)|
+        {
+
+            if *v == 'A' &&
+                ((positions.get(&Coordinate::new(k.x - 1, k.y - 1)).unwrap_or(&char::default()) == &'M' &&
+                positions.get(&Coordinate::new(k.x + 1, k.y + 1)).unwrap_or(&char::default()) == &'S') ||
+                (positions.get(&Coordinate::new(k.x - 1, k.y - 1)).unwrap_or(&char::default()) == &'S' &&
+                positions.get(&Coordinate::new(k.x + 1, k.y + 1)).unwrap_or(&char::default()) == &'M'))
+                &&
+                ((positions.get(&Coordinate::new(k.x - 1, k.y + 1)).unwrap_or(&char::default()) == &'M' &&
+                positions.get(&Coordinate::new(k.x + 1, k.y - 1 )).unwrap_or(&char::default()) == &'S') ||
+                (positions.get(&Coordinate::new(k.x - 1, k.y + 1)).unwrap_or(&char::default()) == &'S' &&
+                positions.get(&Coordinate::new(k.x + 1, k.y - 1 )).unwrap_or(&char::default()) == &'M'))
+            {
+                return Some(true);
+            }
+            None
+        }
+     ).count() as u32)
+
 }
 
 #[cfg(test)]
@@ -132,6 +171,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
-        assert_eq!(result, None);
+        assert_eq!(result, Some(9));
     }
 }
