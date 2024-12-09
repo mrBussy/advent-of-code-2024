@@ -111,7 +111,7 @@ pub fn count_diagonal(input: &str) -> Option<u32> {
 pub fn part_one(input: &str) -> Option<u32> {
 
     Some(
-        count_horizontal(input.lines().into_iter().map(|line| line.chars().collect()).collect()).unwrap() +
+        count_horizontal(input.lines().map(|line| line.chars().collect()).collect()).unwrap() +
         count_vertical(input).unwrap() +
         count_diagonal(input).unwrap()
     )
