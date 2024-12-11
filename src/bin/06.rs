@@ -1,9 +1,48 @@
-mod utils;
 use std::collections::HashMap;
-use utils::Coordinate;
-use utils::Direction;
 
 advent_of_code::solution!(6);
+
+#[derive(Eq, Hash, PartialEq, Debug, Clone, Copy)]
+pub struct Coordinate {
+    x: i32,
+    y: i32,
+}
+
+impl Coordinate {
+
+    pub fn new(x: i32, y: i32) -> Self {
+        Coordinate { x, y }
+    }
+
+    pub fn up(self) -> Self {
+        Coordinate::new(self.x, self.y - 1)
+    }
+    pub fn down(self) -> Self {
+        Coordinate::new(self.x, self.y + 1)
+    }
+    pub fn left(self) -> Self {
+        Coordinate::new(self.x-1, self.y)
+    }
+    pub fn right(self) -> Self {
+        Coordinate::new(self.x+1, self.y)
+    }
+    pub fn move_in_direction(self, direction: &Direction) -> Self {
+        match direction {
+            Direction::North => self.up(),
+            Direction::South => self.down(),
+            Direction::West => self.left(),
+            Direction::East => self.right(),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum Direction {
+    North,
+    South,
+    West ,
+    East,
+}
 
 pub fn part_one(input: &str) -> Option<u32> {
 
@@ -12,11 +51,11 @@ pub fn part_one(input: &str) -> Option<u32> {
         (Coordinate::new(x as i32, y as i32), c)
     )}).collect::<HashMap<Coordinate, char>>();
 
-    let starting_point:Coordinate = *floorplan.iter().filter(|entry| *entry.1=='^').next().unwrap().0;
-    let mut active_point:Coordinate = starting_point.clone();
+    let starting_point:Coordinate = *floorplan.iter().find(|entry| *entry.1=='^').unwrap().0;
+    let mut active_point:Coordinate = starting_point;
     let mut direction = Direction::North;
 
-    while floorplan.get(&active_point).is_some() {
+    while floorplan.contains_key(&active_point) {
         floorplan.entry(active_point).and_modify(|e| *e='$');
         let mut next_point: Coordinate = active_point.move_in_direction(&direction);
 
