@@ -18,12 +18,8 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     while floorplan.get(&active_point).is_some() {
         floorplan.entry(active_point).and_modify(|e| *e='$');
-        let mut next_point = match direction {
-            Direction::North => active_point.up(),
-            Direction::South => active_point.down(),
-            Direction::East => active_point.right(),
-            Direction::West => active_point.left(),
-        };
+        let mut next_point: Coordinate = active_point.move_in_direction(&direction);
+
         if let Some('#') = floorplan.get(&next_point) {
             direction = match direction {
                 Direction::North => Direction::East,
@@ -31,12 +27,7 @@ pub fn part_one(input: &str) -> Option<u32> {
                 Direction::West => Direction::North,
                 Direction::East => Direction::South,
             };
-            next_point = match direction {
-                Direction::North => active_point.up(),
-                Direction::South => active_point.down(),
-                Direction::East => active_point.right(),
-                Direction::West => active_point.left(),
-            };
+            next_point = active_point.move_in_direction(&direction);
         };
         active_point = next_point;
 

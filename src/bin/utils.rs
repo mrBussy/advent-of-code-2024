@@ -23,6 +23,14 @@ impl Coordinate {
     pub fn right(self) -> Self {
         Coordinate::new(self.x+1, self.y)
     }
+    pub fn move_in_direction(self, direction: &Direction) -> Self {
+        match direction {
+            Direction::North => self.up(),
+            Direction::South => self.down(),
+            Direction::West => self.left(),
+            Direction::East => self.right(),
+        }
+    }
 }
 
 #[derive(Debug)]
